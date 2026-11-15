@@ -1,0 +1,43 @@
+const int mod=1e9+7;
+class Solution {
+public:
+    int N;
+    int L, R;
+    //dir 1 for prev inc, 0 for prev dec
+
+    int solve(int indx, int val, int dir, vector<vector<vector<int>>>& dp){
+        if(indx==N) return 1;
+
+        if(dp[indx][val-L][dir]!=-1) return dp[indx][val-L][dir];
+
+        long long ans=0;
+
+        if(dir==0){ //can't go down
+            for(int i=val+1; i<=R; i++){
+                ans=(ans+solve(indx+1, i, 1, dp)%mod)%mod;
+            }
+        }
+        else{   //can't go up
+            for(int i=L; i<val; i++){
+                ans=(ans+solve(indx+1, i, 0, dp)%mod)%mod;
+            }
+        }
+
+        return dp[indx][val-L][dir]=ans;
+    }
+
+    int zigZagArrays(int n, int l, int r) {
+        long long ans=0;
+        N=n;
+        L=l, R=r;
+        
+        vector<vector<vector<int>>> dp(n, vector<vector<int>>(r-l+1, vector<int>(2, -1)));
+        for(int i=l; i<=r; i++){
+            ans=(ans+solve(1, i, 0, dp)%mod)%mod;
+            ans=(ans+solve(1, i, 1, dp)%mod)%mod;
+        }
+        
+
+        return ans;
+    }
+};
