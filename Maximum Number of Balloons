@@ -1,0 +1,37 @@
+class Solution {
+public:
+    int maxNumberOfBalloons(string text) {
+        unordered_map<char, int> mp = {
+            {'b', 0}, {'a', 0}, {'l', 0},
+            {'o', 0}, {'n', 0}
+        };
+
+        for(char ch : text) {
+            if(mp.find(ch) != mp.end()) {
+                mp[ch]++;
+            }
+        }
+
+        int minPos = INT_MAX;
+        int noL = 0;
+        int noO = 0;
+
+        for(auto check : mp) {
+            minPos = min(minPos, check.second);
+
+            if(check.first == 'l')
+                noL = check.second;
+
+            if(check.first == 'o')
+                noO = check.second;
+        }
+
+        if(noO < 1 || noL < 1)
+            return 0;
+
+        noO -= noO % 2;
+        noL -= noL % 2;
+
+        return min(minPos, min(noO / 2, noL / 2));
+    }
+};
